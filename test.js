@@ -7,7 +7,7 @@ var one = {item: 'One'}
   , two = {item: 'Two'}
   , three = {item: 'Three'}
   , four = {item: 'Four'}
-
+  , five = {item: 'Five'}
 
 test('exports a duplex stream', function(t) {
   t.plan(1)
@@ -52,7 +52,7 @@ test('emits when an old state is removed', function(t) {
   var instance = evidence(2)
 
   instance.on('truncated', function(data) {
-    t.deepEqual(one, data)
+    t.deepEqual(one, data[0])
   })
 
   instance.write(one)
@@ -114,7 +114,7 @@ test('emits only once for duplicate values', function(t) {
 })
 
 test('length is set properly', function(t) {
-  t.plan(1)
+  t.plan(2)
 
   var instance = evidence()
 
@@ -122,7 +122,44 @@ test('length is set properly', function(t) {
 
   instance.once('data', function() {
     t.equal(instance.length, 2)
+    t.equal(instance.getLength(), 2)
   })
 
   instance.write(two)
+})
+
+test('can offset the current head index', function(t) {
+  t.plan(2)
+
+  var instance = evidence()
+
+  instance.write(one)
+  instance.write(two)
+  instance.write(three)
+
+  t.deepEqual(instance.offset(1), two)
+  t.equal(instance.length, 2)
+})
+
+test('writing to an offset stack removes old elements', function(t) {
+  t.plan(5)
+
+  var instance = evidence()
+
+  instance.write(one)
+  instance.write(two)
+  instance.write(three)
+  instance.write(four)
+
+  instance.once('truncated', function(data) {
+    t.deepEqual(data[0], four)
+  })
+
+  t.deepEqual(instance.offset(1), three)
+
+  instance.write(five)
+
+  t.deepEqual(instance.length, 4)
+  t.deepEqual(instance.get(0), five)
+  t.deepEqual(instance.get(1), three)
 })
