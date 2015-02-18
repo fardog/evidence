@@ -1,6 +1,6 @@
 {
   "name": "evidence",
-  "version": "0.3.0",
+  "version": "0.3.1",
   "description": "Track the history of an object.",
   "main": "index.js",
   "scripts": {
@@ -10,7 +10,11 @@
     "type": "git",
     "url": "https://github.com/fardog/evidence.git"
   },
-  "keywords": ["history","undo","redo"],
+  "keywords": [
+    "history",
+    "undo",
+    "redo"
+  ],
   "author": "Nathan Wittstock <nate@milkandtang.com>",
   "license": "MIT",
   "bugs": {
