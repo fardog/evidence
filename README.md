@@ -89,14 +89,19 @@ are what the properties above use to do their work:
 - For performance reasons, deep copy is implemented using
   `JSON.parse(JSON.stringify(data))`, which will fail for anything that cannot
   be encoded to or parsed from JSON.
-- When understanding this module, think about it in terms of undo/redo. If you
-  write something to it, that's the latest undo state. If you `offset = 1` that
-  would be like a "undo". Now the element that was at `1` is the new head of
-  the stack, and the stack's length is now one less than it once was. If you
-  want to redo, you can set `offset--` to go back. Any "undone" data will be
-  lost when writing new values to the stack, so `offset++` followed by a
-  `write()` would lose the old element at position `0`, and it'd be emitted
-  on the `truncated` event.
+- When understanding this module, think about it in terms of undo/redo. Take
+  the following example:
+    1. You write three different states to the module. The length of the stack
+       is now `3`. The last state written is at the top of the stack.
+    2. You increment the offset with `offset++`: this is like an "undo"; the
+       head of the stack is now at the second to last item written.
+    3. You decrement the offset with `offset--`: this is like a "redo"; the
+       head of the stack is now at the item it was in step 1 above.
+    4. You increment the head again with `offset++`, and then you write a new
+       value to it. You lose the item that was originally at the head, since
+       you've effectively done an "undo" step, and then written new history to
+       the stack. In this process, the stream emits a `truncate` even that
+       contains the item that was removed from history with your latest write.
 - Writing to a stack that has been `offset()` will truncate any elements newer
   than `offset` when written to.
 

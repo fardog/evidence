@@ -10,6 +10,7 @@
     "type": "git",
     "url": "https://github.com/fardog/evidence.git"
   },
+  "keywords": ["history","undo","redo"],
   "author": "Nathan Wittstock <nate@milkandtang.com>",
   "license": "MIT",
   "bugs": {
