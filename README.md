@@ -99,7 +99,7 @@ are what the properties above use to do their work:
   the stack outgrowing the specified `size`, or due to a new state being saved
   when an offset has been set. Emitted with the event will be an array of the
   removed items.
-- Emits an `error` even when the offset is set greater than the stack length,
+- Emits an `error` event when the offset is set greater than the stack length,
   or less than `0`.
 
 ## Notes
