@@ -5,6 +5,9 @@ Track the history of an object.
 [![Build Status](http://img.shields.io/travis/fardog/evidence/master.svg?style=flat)](https://travis-ci.org/fardog/evidence)
 [![npm install](http://img.shields.io/npm/dm/evidence.svg?style=flat)](https://www.npmjs.org/package/evidence)
 
+A stream that takes any objects written to it, and saves them into a history
+stack. Works in node, or with [browserify][browserify].
+
 ## Example
 
 At its simplest, you simply write a value to the history, and it's saved as the
@@ -56,14 +59,16 @@ the top of the stack.
   front of the stack, so index `0` is the latest, `1` is the item that was
   written prior to `0`, and so on.
 
-These methods use getters and setters, so they won't be available in IE8:
+The following properties use [getters][getters] and [setters][setters], so
+they won't be available in Internet Explorer 8:
 
 - `instance.offset` - Sets the new head element, or gets the current head. Any
   further `get` calls will act as though the element you set is `0`; then `1`
   will be the item saved prior to the new `0`, and so on.
 - `instance.length` - Get current length of the stack.
 
-If you do need support for IE8, use these:
+If you do need support for IE8, use these; they'll work in all browsers, and
+are what the properties above use to do their work:
 
 - `instance.getOffset()`
 - `instance.setOffset([index])`
@@ -98,3 +103,7 @@ If you do need support for IE8, use these:
 ## License
 
 MIT. See [LICENSE](./LICENSE) for details.
+
+[browserify]: http://browserify.org/
+[getters]: https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Functions/get
+[setters]: https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Functions/set
