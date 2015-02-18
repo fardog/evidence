@@ -1,6 +1,6 @@
 var through = require('through')
   , duplexer = require('duplexer')
-  , objectstate = require('objectstate')
+  , equal = require('deep-equal')
 
 var DEFAULT_SIZE = 100
 
@@ -10,12 +10,9 @@ function evidence(_size) {
   var stack = []
     , stackOffset = 0
     , size = _size || DEFAULT_SIZE
-    , last = objectstate()
-    , input = through()
-    , output = through(write)
+    , input = through(write)
+    , output = through()
     , duplex
-
-  input.pipe(last).pipe(output)
 
   duplex = duplexer(input, output)
 
@@ -41,19 +38,24 @@ function evidence(_size) {
 
   function write(data) {
     var removed
+      , insert = JSON.parse(JSON.stringify(data))
+
+    if(equal(insert, stack[stackOffset])) {
+      return
+    }
 
     if(stackOffset) {
       removed = stack.splice(0, stackOffset)
       stackOffset = 0
     }
 
-    stack.splice(0, 0, data)
+    stack.splice(0, 0, insert)
 
     if(stack.length > size) {
       removed = stack.splice(-1, stack.length - size)
     }
 
-    output.queue(data)
+    output.queue(insert)
 
     if(removed) {
       duplex.emit('truncated', removed)

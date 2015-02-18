@@ -17,8 +17,8 @@
   },
   "homepage": "https://github.com/fardog/evidence",
   "dependencies": {
+    "deep-equal": "^1.0.0",
     "duplexer": "^0.1.1",
-    "objectstate": "^2.0.3",
     "through": "^2.3.6"
   },
   "devDependencies": {

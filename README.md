@@ -49,6 +49,8 @@ the top of the stack.
 
 ### Methods and Properties
 
+- `instance.write([data])` - Write a new object to the stack. Any item written
+  is deep-copied before insertion into the stack.
 - `instance.get([index])` - Get the item saved at `index`, and get the last
   item written if `index` isn't provided. New items written are saved to the
   front of the stack, so index `0` is the latest, `1` is the item that was
@@ -79,6 +81,9 @@ If you do need support for IE8, use these:
 
 ## Notes
 
+- For performance reasons, deep copy is implemented using
+  `JSON.parse(JSON.stringify(data))`, which will fail for anything that cannot
+  be encoded to or parsed from JSON.
 - When understanding this module, think about it in terms of undo/redo. If you
   write something to it, that's the latest undo state. If you `offset = 1` that
   would be like a "undo". Now the element that was at `1` is the new head of
