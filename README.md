@@ -40,7 +40,23 @@ instance.get(0) // {item: 'One'}
 ```
 
 History is only saved if the last value written isn't the same as the item in
-the top of the stack.
+the top of the stack. You can undo/redo by changing the head of the stack:
+
+```javascript
+var evidence = require('evidence')
+
+var instance = evidence()
+
+instance.write({item: 'One'})
+instance.write({item: 'Two'})
+instance.write({item: 'Three'})
+
+instance.offset++
+instance.get(0) // {item: 'Two'}
+
+instance.offset--
+instance.get(0) // {item: 'Three'}
+```
 
 ## API
 
@@ -83,6 +99,8 @@ are what the properties above use to do their work:
   the stack outgrowing the specified `size`, or due to a new state being saved
   when an offset has been set. Emitted with the event will be an array of the
   removed items.
+- Emits an `error` even when the offset is set greater than the stack length,
+  or less than `0`.
 
 ## Notes
 
@@ -102,8 +120,10 @@ are what the properties above use to do their work:
        you've effectively done an "undo" step, and then written new history to
        the stack. In this process, the stream emits a `truncate` even that
        contains the item that was removed from history with your latest write.
-- Writing to a stack that has been `offset()` will truncate any elements newer
+- Writing to a stack that has been `offset` will truncate any elements newer
   than `offset` when written to.
+- Trying to set an offset that is less than 0 or greater than the stack length
+  will throw an error, and cause the stream to emit an 'error' event.
 
 ## License
 

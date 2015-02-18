@@ -181,3 +181,26 @@ test('setting an offset emits the new head element', function(t) {
 
   instance.offset = 1
 })
+
+test('throws an error when index is set too high', function(t) {
+  t.plan(1)
+
+  var instance = evidence()
+
+  instance.write(one)
+  instance.write(two)
+
+  t.throws(function() {
+    instance.offset = 2
+  })
+})
+
+test('throws an error when index is set too low', function(t) {
+  t.plan(1)
+
+  var instance = evidence()
+
+  t.throws(function() {
+    instance.offset--
+  })
+})

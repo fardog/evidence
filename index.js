@@ -84,6 +84,19 @@ function evidence(_size) {
   }
 
   function setOffset(_idx) {
+    var err
+
+    if(_idx >= stack.length) {
+      err = 'offset is greater than the stack length'
+    } else if(_idx < 0) {
+      err = 'offset cannot be less than 0'
+    }
+
+    if(err) {
+      duplex.emit('error', new Error(err))
+      throw new Error(err)
+    }
+
     stackOffset = _idx
     output.queue(stack[stackOffset])
 
