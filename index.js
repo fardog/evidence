@@ -20,7 +20,6 @@ function evidence(_size) {
   duplex = duplexer(input, output)
 
   duplex.get = get
-  duplex.offset = offset
 
   // define our length property on the duplex object and the older browser
   // fallback
@@ -28,12 +27,14 @@ function evidence(_size) {
     Object.defineProperty(duplex, 'length', {
         get: getLength
     })
-    Object.defineProperty(duplex, 'currentOffset', {
-        get: currentOffset
+    Object.defineProperty(duplex, 'offset', {
+        get: getOffset
+      , set: setOffset
     })
   } finally {
     duplex.getLength = getLength
-    duplex.getCurrentOffset = currentOffset
+    duplex.getOffset = getOffset
+    duplex.setOffset = setOffset
   }
 
   return duplex
@@ -65,18 +66,18 @@ function evidence(_size) {
     return stack[stackOffset + idx]
   }
 
-  function offset(_idx) {
-    stackOffset += _idx
-    output.queue(stack[stackOffset])
-
-    return stack[stackOffset]
-  }
-
   function getLength() {
     return stack.length - stackOffset
   }
 
-  function currentOffset() {
+  function getOffset() {
     return stackOffset
+  }
+
+  function setOffset(_idx) {
+    stackOffset = _idx
+    output.queue(stack[stackOffset])
+
+    return stack[stackOffset]
   }
 }

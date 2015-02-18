@@ -88,7 +88,6 @@ test('emits values that were written to it', function(t) {
 
   instance.write(one)
   instance.write(two)
-
 })
 
 test('emits only once for duplicate values', function(t) {
@@ -137,7 +136,9 @@ test('can offset the current head index', function(t) {
   instance.write(two)
   instance.write(three)
 
-  t.deepEqual(instance.offset(1), two)
+  instance.offset++
+
+  t.deepEqual(instance.get(), two)
   t.equal(instance.length, 2)
 })
 
@@ -155,11 +156,28 @@ test('writing to an offset stack removes old elements', function(t) {
     t.deepEqual(data[0], four)
   })
 
-  t.deepEqual(instance.offset(1), three)
+  instance.offset = 1
+  t.deepEqual(instance.get(), three)
 
   instance.write(five)
 
   t.deepEqual(instance.length, 4)
   t.deepEqual(instance.get(0), five)
   t.deepEqual(instance.get(1), three)
+})
+
+test('setting an offset emits the new head element', function(t) {
+  t.plan(1)
+
+  var instance = evidence()
+
+  instance.write(one)
+  instance.write(two)
+  instance.write(three)
+
+  instance.once('data', function(data) {
+    t.deepEqual(data, two)
+  })
+
+  instance.offset = 1
 })
