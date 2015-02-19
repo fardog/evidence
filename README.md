@@ -118,7 +118,7 @@ are what the properties above use to do their work:
     4. You increment the head again with `offset++`, and then you write a new
        value to it. You lose the item that was originally at the head, since
        you've effectively done an "undo" step, and then written new history to
-       the stack. In this process, the stream emits a `truncate` even that
+       the stack. In this process, the stream emits a `truncate` event that
        contains the item that was removed from history with your latest write.
 - Writing to a stack that has been `offset` will truncate any elements newer
   than `offset` when written to.
