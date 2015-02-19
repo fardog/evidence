@@ -87,7 +87,7 @@ If you do need support for IE8, use these; they'll work in all browsers, and
 are what the properties above use to do their work:
 
 - `instance.getOffset()`
-- `instance.setOffset([index])`
+- `instance.setOffset(index)`
 - `instance.getLength()`
 
 ### Events
