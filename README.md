@@ -21,7 +21,7 @@ var instance = evidence()
 instance.write({item: 'One'})
 instance.get(0) // {item: 'One'}
 instance.write({item: 'Two'})
-instance.get(1) // {item: 'Two'}
+instance.get(0) // {item: 'Two'}
 instance.length // 2
 ```
 
