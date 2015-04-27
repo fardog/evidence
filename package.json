@@ -1,6 +1,6 @@
 {
   "name": "evidence",
-  "version": "1.0.2",
+  "version": "1.0.3",
   "description": "Track the history of an object.",
   "main": "index.js",
   "scripts": {
